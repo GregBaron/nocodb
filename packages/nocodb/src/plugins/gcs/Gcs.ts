@@ -140,11 +140,12 @@ export default class Gcs implements IStorageAdapterV2 {
     url: string,
     { fetchOptions: { buffer } = { buffer: false } },
   ): Promise<{ url: string; data: any }> {
-    const response = await axios.get(url, {
-      httpAgent: useAgent(url, { stopPortScanningByUrlRedirection: true }),
-      httpsAgent: useAgent(url, { stopPortScanningByUrlRedirection: true }),
-      responseType: buffer ? 'arraybuffer' : 'stream',
-    });
+    try {
+      const response = await axios.get(url, {
+        httpAgent: useAgent(url, {}),
+        httpsAgent: useAgent(url, {}),
+        responseType: buffer ? 'arraybuffer' : 'stream',
+      });
 
     const file = this.storageClient.bucket(this.bucketName).file(destPath);
     await file.save(response.data);
