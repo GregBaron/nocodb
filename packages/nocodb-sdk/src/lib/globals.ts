@@ -307,3 +307,31 @@ export const RowHeightMap = {
   [RowHeight.TALL]: 'tall',
   [RowHeight.EXTRA]: 'extra',
 };
+
+export enum DependencyTableType {
+  Column = 'column',
+  Model = 'table',
+  View = 'view',
+  Widget = 'widget',
+  Workflow = 'workflow',
+}
+
+export enum BaseVersion {
+  V2 = 2,
+  V3 = 3,
+}
+
+export enum PollingIntervals {
+  EVERY_MINUTE = 60,
+  EVERY_5_MINUTES = 300,
+  EVERY_10_MINUTES = 600,
+  EVERY_15_MINUTES = 900,
+  EVERY_30_MINUTES = 1800,
+  EVERY_1_HOUR = 3600,
+  EVERY_2_HOURS = 7200,
+  EVERY_4_HOURS = 14400,
+  EVERY_6_HOURS = 21600,
+  EVERY_12_HOURS = 43200,
+  EVERY_1_DAY = 86400,
+  EVERY_2_DAYS = 172800,
+}
