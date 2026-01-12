@@ -17,8 +17,6 @@ const { t } = useI18n()
 
 const { $api, $e } = useNuxtApp()
 
-const { copy } = useCopy()
-
 const { dashboardUrl } = useDashboard()
 
 const { clearBasesUser } = useBases()
