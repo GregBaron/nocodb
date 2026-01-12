@@ -54,6 +54,12 @@ export enum JobTypes {
   CloudDbMigrate = 'cloud-db-migrate',
   AttachmentUrlUpload = 'attachment-url-upload',
   ExecuteAction = 'execute-action',
+  ReseatSubscription = 'reseat-subscription',
+  ExecuteWorkflow = 'execute-workflow',
+  WorkflowCronSchedule = 'workflow-cron-schedule',
+  WorkflowResumeSchedule = 'workflow-resume-schedule',
+  ResumeWorkflow = 'resume-workflow',
+  HeartbeatWorkflow = 'heartbeat-workflow',
 }
 
 export const SKIP_STORING_JOB_META = [
@@ -67,6 +73,11 @@ export const SKIP_STORING_JOB_META = [
   JobTypes.UpdateSrcStat,
   JobTypes.UpdateUsageStats,
   JobTypes.SyncModuleSchedule,
+  JobTypes.ReseatSubscription,
+  JobTypes.WorkflowCronSchedule,
+  JobTypes.WorkflowResumeSchedule,
+  JobTypes.ResumeWorkflow,
+  JobTypes.HeartbeatWorkflow,
 ];
 
 export enum JobStatus {
@@ -248,4 +259,24 @@ export interface ExecuteActionJobData extends JobData {
   modelId?: string;
   viewId?: string;
   scriptId: string;
+}
+
+export interface ReseatSubscriptionJobData extends JobData {
+  workspaceOrOrgId: string;
+  initiator?: string;
+  timestamp: number;
+}
+
+export interface ExecuteWorkflowJobData extends JobData {
+  workflowId: string;
+  triggerNodeId?: string; // Optional: specific trigger node to start from
+  triggerInputs: any; // Data passed to the trigger node
+}
+
+export interface ResumeWorkflowJobData extends JobData {
+  executionId: string; // Workflow execution to resume
+}
+
+export interface HeartbeatWorkflowJobData extends JobData {
+  workflowId: string;
 }
