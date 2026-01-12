@@ -1,22 +1,32 @@
+/**
+ * Security middleware for iframe embedding
+ * Modified for MySandbox prototype - allows iframe embedding from my-sandbox.io
+ */
 export default defineNuxtRouteMiddleware(async (to) => {
-  // avoid non-embeddable paths within an iframe
+  // Check if we're in an iframe
   if (self !== top) {
-    // allow for shared base
+    // Allow embedding from MySandbox domains
+    const parentOrigin = document.referrer || ''
+    if (parentOrigin.includes('my-sandbox.io') || parentOrigin.includes('localhost')) {
+      return // Allowed for MySandbox
+    }
+
+    // Allow for shared base (original behavior)
     if (to.path.startsWith('/base/')) {
       return
     }
 
-    // allow for shared views based on page layout
+    // Allow for shared views based on page layout (original behavior)
     if (to.meta?.layout === 'shared-view') {
       return
     }
 
-    // allow for shared views based on pageType meta prop
+    // Allow for shared views based on pageType meta prop (original behavior)
     if (to.meta?.pageType === 'shared-view') {
       return
     }
 
-    // throw for all other pages
+    // Block other iframe sources
     throw createError({ statusCode: 403, message: 'Not allowed' })
   }
 })
