@@ -32,13 +32,23 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install dependencies and build
+      - name: Install dependencies
         run: |
           export NODE_OPTIONS="--max_old_space_size=16384"
           pnpm install --ignore-scripts
-          pnpm --filter=nocodb-sdk run build
-          pnpm --filter=nc-gui run build:copy
-          pnpm --filter=nocodb run build
+
+      - name: Build nocodb-sdk
+        run: pnpm --filter=nocodb-sdk run build
+
+      - name: Build nc-gui (frontend)
+        run: |
+          export NODE_OPTIONS="--max_old_space_size=16384"
+          pnpm --filter=nc-gui run generate
+
+      - name: Copy frontend to Docker context
+        run: |
+          mkdir -p packages/nocodb/docker/nc-gui
+          cp -r packages/nc-gui/.output/public/* packages/nocodb/docker/nc-gui/
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -54,7 +64,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./packages/nocodb
-          file: ./packages/nocodb/Dockerfile
+          file: ./packages/nocodb/Dockerfile.local
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
