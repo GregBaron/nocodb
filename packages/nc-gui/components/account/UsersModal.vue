@@ -144,7 +144,7 @@ const userRoleOptions = [
               :message="inviteUrl"
               message-class="!text-green-700 !text-bodyDefaultSm"
               background
-              :copyText="inviteUrl"
+              :copy-text="inviteUrl"
               class="mt-2 !p-3"
             />
 
