@@ -40,6 +40,9 @@ jobs:
       - name: Build nocodb-sdk
         run: pnpm --filter=nocodb-sdk run build
 
+      - name: Build nocodb backend (generates docker/main.js)
+        run: pnpm --filter=nocodb run docker:build
+
       - name: Build nc-gui (frontend)
         run: |
           export NODE_OPTIONS="--max_old_space_size=16384"
