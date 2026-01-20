@@ -32,12 +32,21 @@ export function randomTokenString(): string {
 
 export function setTokenCookie(res: Response, token): void {
   // create http only cookie with refresh token that expires in 7 days
-  const cookieOptions = {
+  // sameSite: 'none' and secure: true are required for iframe embedding (third-party cookies)
+  const cookieOptions: {
+    httpOnly: boolean;
+    expires: Date;
+    domain: string | undefined;
+    sameSite: 'none' | 'lax' | 'strict';
+    secure: boolean;
+  } = {
     httpOnly: true,
     expires: new Date(
       Date.now() + NC_REFRESH_TOKEN_EXP_IN_DAYS * 24 * 60 * 60 * 1000,
     ),
     domain: process.env.NC_BASE_HOST_NAME || undefined,
+    sameSite: 'none',  // Allow cross-site cookies for iframe embedding
+    secure: true,       // Required when sameSite is 'none'
   };
   res.cookie('refresh_token', token, cookieOptions);
 }
