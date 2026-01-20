@@ -43,6 +43,17 @@ jobs:
       - name: Build nocodb backend (generates docker/main.js)
         run: pnpm --filter=nocodb run docker:build
 
+      - name: Clean nc-gui build cache
+        run: |
+          rm -rf packages/nc-gui/.nuxt packages/nc-gui/.output
+          echo "Cleared .nuxt and .output directories"
+
+      - name: Verify security middleware content
+        run: |
+          echo "=== Security Middleware Content ==="
+          cat packages/nc-gui/middleware/02.security.global.ts
+          echo "=================================="
+
       - name: Build nc-gui (frontend)
         run: |
           export NODE_OPTIONS="--max_old_space_size=16384"
