@@ -18,9 +18,28 @@ useSidebar('nc-left-sidebar', { hasSidebar: false })
 
 const formValidator = ref()
 
+// MySandbox: Auto-login credentials for iframe demo mode
+const DEMO_EMAIL = 'demo@mysandbox.io'
+const DEMO_PASSWORD = 'Demo123!'
+
 const form = reactive({
   email: '',
   password: '',
+})
+
+// MySandbox: Auto-login when embedded in iframe
+onMounted(async () => {
+  if (ncIsIframe()) {
+    // Pre-fill demo credentials and auto-submit
+    form.email = DEMO_EMAIL
+    form.password = DEMO_PASSWORD
+
+    // Small delay to ensure form is ready
+    await nextTick()
+    setTimeout(() => {
+      signIn()
+    }, 500)
+  }
 })
 
 const formRules: Record<string, RuleObject[]> = {
